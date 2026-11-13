@@ -20,7 +20,7 @@ void* PushStringUART(char* StringC){
             PushCharacterUART('\r');
         }
 
-        PushCharacterUART(*s++);
+        PushCharacterUART(*StringC++);
     }
 }
 
