@@ -14,7 +14,7 @@ void PushCharacterUART(char Character) {
     *PL011_DR = Character;
 }
 
-void* PushStringUART(char* StringC){
+void PushStringUART(char* StringC){
     while (*StringC) {
         if (*StringC == '\n') {
             PushCharacterUART('\r');

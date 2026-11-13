@@ -27,4 +27,6 @@ void ExceptionHandlerC(unsigned long long esr, unsigned long long elr) {
     PrintHex(elr);
     
     PushStringUART("System Halted.\n");
+
+    while (1){}
 }

@@ -68,4 +68,7 @@ UnhandledException:
     // Jump to the C function
     b ExceptionHandlerC
 
-    b UnhandledException
+    b ExceptionHalt
+
+ExceptionHalt:
+    b ExceptionHalt
