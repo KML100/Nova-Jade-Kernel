@@ -2,29 +2,28 @@
 // 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Name: ExceptionTable.S
+// Name: ExceptionTableEL1.S
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// The ARM64 Exception Vector Table for Nova Jade
-
-#define ExceptionLinkRegisterEL1 elr_el1
-#define ExceptionSyndRegisterEL1 esr_el1
+#define ExceptionSyndromeEL1 esr_el1
+#define ExceptionLinkEL1 elr_el1
 
 .section ".text"
 .align 11 // Align to 2KB (2^11 = 2048)
 
-.global ExceptionVectorTable
-ExceptionVectorTable:
+.global ExceptionVectorTableEL1
+ExceptionVectorTableEL1:
+
     // Synchronous Exceptions
     .balign 128
-    b UnhandledException //SyncCurrentEL_SP0
+    b UnhandledException
     .balign 128
-    b UnhandledException //SyncCurrentEL_SPx
+    b UnhandledException
     .balign 128
-    b UnhandledException //SyncLowerEL_AArch64
+    b UnhandledException
     .balign 128
     b UnhandledException
 
@@ -59,16 +58,13 @@ ExceptionVectorTable:
     b UnhandledException
 
 UnhandledException:
+    mrs x0, ExceptionSyndromeEL1  // Exception Syndrome
+    mrs x1, ExceptionLinkEL1  // Exception Link
 
-    // If we get here, something went horribly wrong.
-
-    mrs x0, ExceptionSyndRegisterEL1  // Exception Syndrome
-    mrs x1, ExceptionLinkRegisterEL1  // Exception Link
-
-    // Jump to the C function
-    b ExceptionHandlerC
+    bl ExceptionHandlerC // Jump to the C exception handler function
 
     b ExceptionHalt
 
 ExceptionHalt:
+    wfe
     b ExceptionHalt
