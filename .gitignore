@@ -2,6 +2,7 @@
 *.img
 *.o
 *.log
+QEMU.log
 .vscode
 Makefile
-*.log
+
