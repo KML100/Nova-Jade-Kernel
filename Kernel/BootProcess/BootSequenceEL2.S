@@ -10,10 +10,12 @@
 
 #define ExceptionTableEL2 vbar_el2
 #define ConfigRegisterEL2 hcr_el2
-#define StackPointerEL2 sp_el2
 #define ExceptionReturnEL2 elr_el2
 #define StackPointerMode SPSel
 #define StatusRegisterEL2 spsr_el2
+
+#define StackPointerEL1 sp_el1
+#define StackPointerEL0 sp_el0
 
 #define AArach64Mode (1 << 31) // Runs In AArach64Mode
 #define ConfigMaskEL2 (AArach64Mode)
@@ -26,6 +28,8 @@
 #define StackPointerModeMask 1
 
 #define StackPointerStartEL2 0x200000
+#define StackPointerStartEL1 0x300000
+#define StackPointerStartEL0 0x400000
 
 .global BootEL2
 BootEL2:
@@ -45,11 +49,14 @@ BootEL2:
     msr StackPointerMode, x1
     isb // Refresh
 
-    // Set Up EL2 Stack Pointer
-    ldr x1, =0x200000
-    msr sp_el2, x1 // This is somehow an Undefined Instruction
+    // Set EL2 Stack Pointer
+    mov sp, #StackPointerStartEL2
 
-    b Loop
+    ldr x1, =StackPointerStartEL1
+    msr StackPointerEL1, x1
+
+    ldr x1, =StackPointerStartEL0
+    msr StackPointerEL0, x1
 
     // Load And Set EL2 Exception Table
     ldr x0, =ExceptionVectorTableEL2 // Other File
@@ -60,9 +67,4 @@ BootEL2:
     ldr x0, =HalfBoot
     msr ExceptionReturnEL2, x0
 
-    b Loop
-
     eret
-
-Loop:
-    b Loop

@@ -8,18 +8,11 @@
 // 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-#define StackPointerStartEL2 0x400000
 #define ClearBlockSizeBSS 8
 
 .global BootKernel
 BootKernel:
-
-    // Set Up EL2 Stack Pointer
-    ldr x0, =StackPointerStartEL2
-    mov sp, x0
-
     bl StartClearingBSS
-
     b InvokeKernelMain
 
 StartClearingBSS:

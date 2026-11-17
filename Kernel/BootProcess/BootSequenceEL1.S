@@ -9,21 +9,13 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #define ExceptionTableEL1 vbar_el1
-#define StackPointerEL1 sp_el1
-
-#define StackPointerStartEL1 0x300000
 
 .global BootEL1
 BootEL1:
 
-    // Set Up EL1 Stack Pointer
-    ldr x1, =StackPointerStartEL1
-    msr StackPointerEL1, x1
-
     // Load And Set EL1 Exception Table
     ldr x0, =ExceptionVectorTableEL1 // Other File
     msr ExceptionTableEL1, x0
-    
     isb // Refresh
 
     ret

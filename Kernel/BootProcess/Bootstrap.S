@@ -29,7 +29,7 @@ StartBootstrap:
     mrs x0, CoreInformationEL1
     and x0, x0, #UniCoreSystemMask
 
-    //cbnz x0, MainCoreBoot // Boot As UniCore
+    cbnz x0, MainCoreBoot // Boot As UniCore
     b BootAtomically // Boot As MultiCore
 
 BootAtomically:
@@ -80,9 +80,5 @@ FullBoot:
 
 .global HalfBoot
 HalfBoot:
-    //bl BootEL1 // Other File
-    //b BootKernel // Other File
-    b Loop
-
-Loop:
-    b Loop
+    bl BootEL1 // Other File
+    b BootKernel // Other File
